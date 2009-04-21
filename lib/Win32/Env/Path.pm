@@ -8,14 +8,14 @@ Win32::Env::Path - Manipulate environment PATH strings
 
 =head1 SYNOPSIS
 
-use Win32::Env::Path;
-
-my $path = Win32::Env::Path->new(
-	name => 'PATH',
-);
-
-$path->add('C:\\strawberry');
-$path->remove('C:\\strawberry');
+  use Win32::Env::Path;
+  
+  my $path = Win32::Env::Path->new(
+      name => 'PATH',
+  );
+  
+  $path->add('C:\\strawberry');
+  $path->remove('C:\\strawberry');
 
 =head1 DESCRIPTION
 
@@ -45,7 +45,7 @@ use Params::Util       '_STRING';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.01';
+	$VERSION = '0.02';
 }
 
 my $USER_ENV   = 'HKEY_CURRENT_USER\\Environment';
@@ -67,6 +67,7 @@ sub new {
 	# Check params and provide defaults
 	$self->{name}   ||= 'PATH';
 	$self->{autosave} = defined $self->{autosave} ? !! $self->{autosave} : 1;
+	$self->{autoset}  = defined $self->{autoset}  ? !! $self->{autoset}  : 0;
 	$self->{user}     = !! $self->{user};
 	$self->{env}      = $self->user ? $Registry->{$USER_ENV} : $Registry->{$SYSTEM_ENV};
 	($self->{value},$self->{type}) = $self->env->GetValue($self->name);
@@ -122,6 +123,33 @@ sub elements {
 #####################################################################
 # Main Interface Methods
 
+sub add {
+	my $self = shift;
+	my $path = shift;
+	unless ( defined _STRING($path) ) {
+		croak("Did not provide a path to ->add");
+	}
+	die "CODE INCOMPLETE";
+}
+
+sub push {
+	my $self = shift;
+	my $path = shift;
+	unless ( defined _STRING($path) ) {
+		croak("Did not provide a path to ->push");
+	}
+	die "CODE INCOMPLETE";
+}
+
+sub unshift {
+	my $self = shift;
+	my $path = shift;
+	unless ( defined _STRING($path) ) {
+		croak("Did not provide a path to ->unshift");
+	}
+	die "CODE INCOMPLETE";
+}
+
 sub remove {
 	my $self = shift;
 	my $path = shift;
@@ -158,7 +186,7 @@ sub clean {
 		my $full = $self->resolve($array->[$path]);
 		next if $seen{$full}++;
 		next unless -d $full;
-		push @$new, $array->[$path];
+		CORE::push @$new, $array->[$path];
 	}
 
 	# Did we make any changes?
@@ -167,16 +195,6 @@ sub clean {
 	# Store and sync
 	@$array = @$new;
 	$self->sync;
-}
-
-sub clean_three {
-	my $class = shift;
-	foreach my $name ( qw{ PATH LIB INCLUDE } ) {
-		Win32::Env::Path->new(
-			name => $name,
-		)->clean;
-	}
-	return 1;
 }
 
 sub sync {
@@ -244,7 +262,7 @@ L<Win32::Env>, L<Perl::Dist::Inno>
 
 =head1 COPYRIGHT
 
-Copyright 2007 - 2008 Adam Kennedy.
+Copyright 2007 - 2009 Adam Kennedy.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
