@@ -5,7 +5,7 @@ author:
 build_requires:
   ExtUtils::MakeMaker: 6.42
   Test::More: 0.47
-  Test::Script: 0
+  Test::Script: 1.03
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
@@ -29,4 +29,4 @@ resources:
   ChangeLog: http://fisheye2.atlassian.com/changelog/cpan/trunk/Win32-Env-Path
   license: http://dev.perl.org/licenses/
   repository: http://svn.ali.as/cpan/trunk/Win32-Env-Path
-version: 0.02
+version: 0.03
